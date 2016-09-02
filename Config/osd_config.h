@@ -1,3 +1,5 @@
+// Bix2, 16.08.31
+
 // This file is part of MatrixPilot.
 //
 //    http://code.google.com/p/gentlenav/
@@ -27,8 +29,8 @@
 
 
 // define USE_OSD to one of the types above to enables that system
-#define USE_OSD         OSD_NONE
-//#define USE_OSD         OSD_NATIVE
+//#define USE_OSD         OSD_NONE
+#define USE_OSD         OSD_NATIVE
 //#define USE_OSD         OSD_REMZIBI
 //#define USE_OSD         OSD_MINIM
 

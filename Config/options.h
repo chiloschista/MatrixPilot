@@ -1,3 +1,5 @@
+// Bixler2, 16.07.27 / 3.8.16
+//
 // This file is part of MatrixPilot.
 //
 //    http://code.google.com/p/gentlenav/
@@ -67,6 +69,18 @@
 #define GPS_TYPE                            GPS_STD
 //#define DEFAULT_GPS_BAUD                    57600   // added for GPS_NMEA support
 
+/*
+#define CENTRIFUGAL_WITHOUT_GPS             0
+
+#define CUSTOM_OFFSETS
+#define XACCEL_OFFSET (  273 )     // Bill's ( 363 )
+#define YACCEL_OFFSET (  -62 )     // Bill's ( 36 )
+#define ZACCEL_OFFSET ( -869 )     // Bill's ( -1097 )
+#define XRATE_OFFSET  ( -185 )
+#define YRATE_OFFSET  (  -62 )
+#define ZRATE_OFFSET ( -39 )
+*/
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // Enable/Disable core features of this firmware
@@ -111,7 +125,7 @@
 // altitude is determined by the position of the throttle stick on the transmitter.
 // NOTE: even when set to AH_NONE, MatrixPilot will still try to stabilize pitch as long
 // as PITCH_STABILIZATION is set to 1 above, but will not aim for any specific altitude.
-#define ALTITUDEHOLD_STABILIZED             AH_FULL
+#define ALTITUDEHOLD_STABILIZED             AH_NONE // AH_FULL
 #define ALTITUDEHOLD_WAYPOINT               AH_FULL
 
 // Speed Control
@@ -185,8 +199,8 @@
 // PPM_NUMBER_OF_CHANNELS is the number of channels sent on the PWM signal.  This is
 // often different from the NUM_INPUTS value below, and should usually be left at 8.
 //
-#define USE_PPM_INPUT                       0
-#define PPM_NUMBER_OF_CHANNELS              8
+#define USE_PPM_INPUT                       1 // 0
+#define PPM_NUMBER_OF_CHANNELS              9 // 8
 #define PPM_SIGNAL_INVERTED                 0
 #define PPM_ALT_OUTPUT_PINS                 0
 
@@ -201,21 +215,21 @@
 // If using PWM inputs (parallel Rx connections), set to the number of cables connected, 1-8
 // If using PPM inputs (serial Rx connection), set to the number of Rx channels, up to PPM_NUMBER_OF_CHANNELS
 // If using LRS library (integrated SPI tranceiver), set to the number of Rx channels, up to 16
-#define NUM_INPUTS                          5
+#define NUM_INPUTS                          9 // 5
 
 // Channel numbers for each input.
 // Use as is, or edit to match your setup.
 //   - If you're set up to use Rudder Navigation (like MatrixNav), then you may want to swap
 //     the aileron and rudder channels so that rudder is CHANNEL_1, and aileron is 5.
-#define THROTTLE_INPUT_CHANNEL              CHANNEL_3
-#define AILERON_INPUT_CHANNEL               CHANNEL_1
-#define ELEVATOR_INPUT_CHANNEL              CHANNEL_2
-#define RUDDER_INPUT_CHANNEL                CHANNEL_5
-#define MODE_SWITCH_INPUT_CHANNEL           CHANNEL_4
+#define THROTTLE_INPUT_CHANNEL              CHANNEL_1
+#define AILERON_INPUT_CHANNEL               CHANNEL_2
+#define ELEVATOR_INPUT_CHANNEL              CHANNEL_3
+#define RUDDER_INPUT_CHANNEL                CHANNEL_4
+#define MODE_SWITCH_INPUT_CHANNEL           CHANNEL_8
 #define CAMERA_PITCH_INPUT_CHANNEL          CHANNEL_UNUSED
 #define CAMERA_YAW_INPUT_CHANNEL            CHANNEL_UNUSED
 #define CAMERA_MODE_INPUT_CHANNEL           CHANNEL_UNUSED
-#define OSD_MODE_SWITCH_INPUT_CHANNEL       CHANNEL_UNUSED
+#define OSD_MODE_SWITCH_INPUT_CHANNEL       CHANNEL_9
 #define PASSTHROUGH_A_INPUT_CHANNEL         CHANNEL_UNUSED
 #define PASSTHROUGH_B_INPUT_CHANNEL         CHANNEL_UNUSED
 #define PASSTHROUGH_C_INPUT_CHANNEL         CHANNEL_UNUSED
@@ -239,9 +253,9 @@
 // connect THROTTLE_OUTPUT_CHANNEL to one of the built-in Outputs (1, 2, or 3) to make
 // sure your board gets power.
 //
-#define THROTTLE_OUTPUT_CHANNEL             CHANNEL_3
-#define AILERON_OUTPUT_CHANNEL              CHANNEL_1
-#define ELEVATOR_OUTPUT_CHANNEL             CHANNEL_2
+#define THROTTLE_OUTPUT_CHANNEL             CHANNEL_1
+#define AILERON_OUTPUT_CHANNEL              CHANNEL_2
+#define ELEVATOR_OUTPUT_CHANNEL             CHANNEL_3
 #define RUDDER_OUTPUT_CHANNEL               CHANNEL_4
 #define AILERON_SECONDARY_OUTPUT_CHANNEL    CHANNEL_UNUSED
 #define CAMERA_PITCH_OUTPUT_CHANNEL         CHANNEL_UNUSED
@@ -257,9 +271,9 @@
 // Servo Reversing Configuration
 // For any of these that are set to 1, that servo will be sent reversed controls.
 // Note that your servo reversing settings here should match what you set on your transmitter.
-#define AILERON_CHANNEL_REVERSED            0
-#define ELEVATOR_CHANNEL_REVERSED           0
-#define RUDDER_CHANNEL_REVERSED             0
+#define AILERON_CHANNEL_REVERSED            1
+#define ELEVATOR_CHANNEL_REVERSED           1
+#define RUDDER_CHANNEL_REVERSED             1
 #define AILERON_SECONDARY_CHANNEL_REVERSED  0
 #define THROTTLE_CHANNEL_REVERSED           0
 #define CAMERA_PITCH_CHANNEL_REVERSED       0
@@ -301,9 +315,9 @@
 //
 // FAILSAFE_INPUT_MIN and _MAX define the range within which we consider the radio on.
 // Normal signals should fall within about 2000 - 4000.
-#define FAILSAFE_INPUT_CHANNEL              THROTTLE_INPUT_CHANNEL
-#define FAILSAFE_INPUT_MIN                  1500
-#define FAILSAFE_INPUT_MAX                  4500
+#define FAILSAFE_INPUT_CHANNEL              MODE_SWITCH_INPUT_CHANNEL
+#define FAILSAFE_INPUT_MIN                  2200
+#define FAILSAFE_INPUT_MAX                  4000
 
 // FAILSAFE_TYPE controls the UDB's behavior when in failsafe mode due to loss of transmitter
 // signal.  (Set to FAILSAFE_RTL or FAILSAFE_MAIN_FLIGHTPLAN.)
@@ -343,12 +357,12 @@
 // SERIAL_UDB_MAG outputs the automatically calculated offsets and raw magnetometer data.
 // Note that SERIAL_MAVLINK defaults to using a baud rate of 57600 baud (other formats default to 19200)
 
-#define SERIAL_OUTPUT_FORMAT                SERIAL_NONE
+#define SERIAL_OUTPUT_FORMAT                SERIAL_UDB_EXTRA
 
 ////////////////////////////////////////////////////////////////////////////////
 // Serial Output BAUD rate for either standard telemetry streams or MAVLink
 //  19200, 38400, 57600, 115200, 230400, 460800, 921600 // yes, it really will work at this rate
-//#define SERIAL_BAUDRATE                     19200
+  #define SERIAL_BAUDRATE                     57600
 
 
 // NUM_ANALOG_INPUTS:
@@ -377,19 +391,21 @@
 // to match your Receiver's RSSI format.  Note that some receivers use a higher voltage to
 // represent a lower signal strength, so you may need to set MIN higher than MAX.
 
-#define ANALOG_CURRENT_INPUT_CHANNEL        CHANNEL_UNUSED
-#define ANALOG_VOLTAGE_INPUT_CHANNEL        CHANNEL_UNUSED
-#define ANALOG_RSSI_INPUT_CHANNEL           CHANNEL_UNUSED
+#define ANALOG_CURRENT_INPUT_CHANNEL        CHANNEL_1
+#define ANALOG_VOLTAGE_INPUT_CHANNEL        CHANNEL_2
+#define ANALOG_RSSI_INPUT_CHANNEL           CHANNEL_3
 
-#define MAX_CURRENT                         900 // 90.0 Amps max for the sensor from SparkFun (in tenths of Amps)
-#define CURRENT_SENSOR_OFFSET               10  // Add 1.0 Amp to whatever value we sense
+#define MAX_CURRENT                         1150 // 894, 900, 90.0 Amps max for the sensor from SparkFun (in tenths of Amps)
 
-#define MAX_VOLTAGE                         543 // 54.3 Volts max for the sensor from SparkFun (in tenths of Volts)
-#define VOLTAGE_SENSOR_OFFSET               0   // Add 0.0 Volts to whatever value we sense
+#define CURRENT_SENSOR_OFFSET               -6  // -9, Add 1.0 Amp to whatever value we sense
+
+#define MAX_VOLTAGE                         518 // 543, 54.3 Volts max for the sensor from SparkFun (in tenths of Volts)
+#define VOLTAGE_SENSOR_OFFSET               1   // 0, Add 0.0 Volts to whatever value we sense
+
 
 // RSSI - RC Receiver signal strength
 #define RSSI_MIN_SIGNAL_VOLTAGE             0.5     // Voltage when RSSI should show 0%
-#define RSSI_MAX_SIGNAL_VOLTAGE             3.3     // Voltage when RSSI should show 100%
+#define RSSI_MAX_SIGNAL_VOLTAGE             1.0     // 3.3     // Voltage when RSSI should show 100%
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -469,8 +485,10 @@
 // waypoint navigation mode and fly by wire mode respectively.
 // They are specified in terms of the maximum desired turning rate in degrees per second in each mode.
 // The largest possible value is 240 degrees per second, anything larger will be clipped to 240.
-#define TURN_RATE_NAV                       30.0
-#define TURN_RATE_FBW                       60.0
+
+#define TURN_RATE_NAV                       30.0 // 30
+#define TURN_RATE_FBW                       60.0 // 60
+
 
 // Aileron/Roll Control Gains
 // ROLLKP is the proportional gain, approximately 0.25
@@ -495,7 +513,7 @@
 // Parameters below are used in the computation of angle of attack and pitch trim.
 // ( INVERTED_NEUTRAL_PITCH is no longer used and should not be used.) -- Note (RobD) yes it is?
 // If these parameters are not defined, angle of attack and pitch trim will be set to zero.
-// REFERENCE_SPEED                      The nominal speed in meters per second at which the parameters are defined.
+// CRUISE_SPEED                         The nominal speed in meters per second at which the parameters are defined.
 // ANGLE_OF_ATTACK_NORMAL               Angle of attack in degrees in the body frame for normal straight and level flight at cruise speed.
 // ANGLE_OF_ATTACK_INVERTED             Angle of attack in degrees in the body frame for inverted straight and level flight at cruise speed.
 // Note: ANGLE_OF_ATTACK_INVERTED is usually negative, with typical values in the -5 to -10 degree range.
@@ -503,27 +521,12 @@
 // ELEVATOR_TRIM_INVERTED               Elevator trim in fractional servo units (-1.0 to 1.0 ) for inverted straight and level flight at cruise speed.
 // Note: ELEVATOR_TRIM_INVERTED is usually negative, with typical values in the -0.5 to -1.0 range.
 
-#define REFERENCE_SPEED			    (  12.0 )
-#define ANGLE_OF_ATTACK_NORMAL		    (   0.0 )
-#define ANGLE_OF_ATTACK_INVERTED	    (   0.0 )
-#define ELEVATOR_TRIM_NORMAL		    (   0.0 )
-#define ELEVATOR_TRIM_INVERTED		    (   0.0 )
-
-// CUSTOM OFFSETS are recommended when using Angle of Attack and Trim Parameters
-// They ensure that the measured orientation of the plane, particularly in pitch,
-// are the same for each flight (they are not re-calibrated on bootup but are
-// pre-measured and fixed for all flights by the offsets below).
-// Note each offset is specific to one specific autopilot board.
-// Be careful not to use the offsets below with the wrong board.
-// Uncomment the line below to activate the CUSTOM_OFFSETS feature in MatrixPilot.
-
-//#define CUSTOM_OFFSETS
-#define XACCEL_OFFSET (  000 ) 
-#define YACCEL_OFFSET (  000 )
-#define ZACCEL_OFFSET (  000 )
-#define XRATE_OFFSET  (  000 ) // not used by the UDB4
-#define YRATE_OFFSET  (  000 ) // not used by the UDB4
-#define ZRATE_OFFSET  (  000 ) // not used by the UDB4
+// The following are the values for HILSIM EasyStar2:
+#define REFERENCE_SPEED                      ( 12.0 )
+#define ANGLE_OF_ATTACK_NORMAL            ( 0.0 )  // ( -0.8 )
+#define ANGLE_OF_ATTACK_INVERTED          ( 0.0 )  // ( -7.2 )
+#define ELEVATOR_TRIM_NORMAL              ( 0.0 )  // ( -0.03 )
+#define ELEVATOR_TRIM_INVERTED            ( 0.0 )  // ( -0.67 )
 
 // Rudder/Yaw Control Gains
 // YAWKP_RUDDER is the proportional feedback gain for rudder control of yaw orientation.
@@ -553,7 +556,7 @@
 // HOVER_PITCH_OFFSET is the neutral pitch angle for the plane (in degrees) while stabilizing a hover
 // HOVER_YAWKP is the yaw-proportional feedback gain applied to the rudder while stabilizing a hover
 // HOVER_YAWKD is the yaw gyro feedback gain applied to rudder while stabilizing a hover
-// HOVER_YAW_OFFSET is the neutral yaw angle for the plane (in degrees) while stabilizing a hover
+// HOVER_YAW_ is the neutral yaw angle for the plane (in degrees) while stabilizing a hover
 // HOVER_PITCH_TOWARDS_WP is the max angle in degrees to pitch the nose down towards the WP while navigating
 // HOVER_NAV_MAX_PITCH_RADIUS is the radius around a waypoint in meters, within which the HOVER_PITCH_TOWARDS_WP
 //                            value is proportionally scaled down.
@@ -693,8 +696,7 @@
 // Set this to either FP_WAYPOINTS or FP_LOGO
 // The Waypoint definitions and options are located in the waypoints.h file.
 // The Logo flight plan definitions and options are located in the flightplan-logo.h file.
-#define FLIGHT_PLAN_TYPE                    FP_WAYPOINTS
-
+#define FLIGHT_PLAN_TYPE                    FP_LOGO
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Vehicle and Pilot Identification
@@ -713,10 +715,10 @@
 //#define ID_VEHICLE_REGISTRATION "TW2-PDH-UK"
 //#define ID_LEAD_PILOT "Pete Hollands"
 //#define ID_DIY_DRONES_URL "http://www.diydrones.com/profile/PeterHollands"
-#define ID_VEHICLE_MODEL_NAME               "Not Defined"
-#define ID_VEHICLE_REGISTRATION             "Not Defined"
-#define ID_LEAD_PILOT                       "Not Defined"
-#define ID_DIY_DRONES_URL                   "http://www.diydrones.com"
+#define ID_VEHICLE_MODEL_NAME               "Bixler2"
+#define ID_VEHICLE_REGISTRATION             "Bixler2"
+#define ID_LEAD_PILOT                       "Riccardo Kuebler"
+#define ID_DIY_DRONES_URL                   "http://diydrones.com/profile/RiccardoKuebler"
 
 
 ////////////////////////////////////////////////////////////////////////////////
